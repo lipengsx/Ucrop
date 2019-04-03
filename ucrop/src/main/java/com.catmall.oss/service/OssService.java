@@ -45,16 +45,21 @@ public class OssService {
     }
 
     public void initOSSClient() {
-        OSSCredentialProvider credentialProvider = new OSSStsTokenCredentialProvider(
-                ossUploadBean.getAccessKeyId(),ossUploadBean.getAccessKeySecrect(),ossUploadBean.getSecurityToken());
-        ClientConfiguration conf = new ClientConfiguration();
-        conf.setConnectionTimeout(15 * 1000); // 连接超时，默认15秒
-        conf.setSocketTimeout(15 * 1000); // socket超时，默认15秒
-        conf.setMaxConcurrentRequest(8); // 最大并发请求数，默认5个
-        conf.setMaxErrorRetry(2); // 失败后最大重试次数，默认2次
+        try {
+            OSSCredentialProvider credentialProvider = new OSSStsTokenCredentialProvider(
+                    ossUploadBean.getAccessKeyId(), ossUploadBean.getAccessKeySecrect(), ossUploadBean.getSecurityToken());
+            ClientConfiguration conf = new ClientConfiguration();
+            conf.setConnectionTimeout(15 * 1000); // 连接超时，默认15秒
+            conf.setSocketTimeout(15 * 1000); // socket超时，默认15秒
+            conf.setMaxConcurrentRequest(8); // 最大并发请求数，默认5个
+            conf.setMaxErrorRetry(2); // 失败后最大重试次数，默认2次
 
-        // oss为全局变量，endpoint是一个OSS区域地址
-        oss = new OSSClient(context, ossUploadBean.getOutEndPoint(), credentialProvider, conf);
+            // oss为全局变量，endpoint是一个OSS区域地址
+            oss = new OSSClient(context, ossUploadBean.getOutEndPoint(), credentialProvider, conf);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void uploadUri(Context context, Uri imageUri) {
