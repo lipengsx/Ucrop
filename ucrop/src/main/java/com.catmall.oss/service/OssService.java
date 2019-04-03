@@ -42,7 +42,6 @@ public class OssService {
     public OssService(Context context, OSSBean ossBean) {
         this.context = context;
         this.ossUploadBean = ossBean;
-        initOSSClient();
     }
 
     public void initOSSClient() {
