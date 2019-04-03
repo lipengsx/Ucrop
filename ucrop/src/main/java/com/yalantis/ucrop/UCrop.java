@@ -17,6 +17,7 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.catmall.oss.beans.OSSBean;
 import com.yalantis.ucrop.model.AspectRatio;
 
 import java.util.ArrayList;
@@ -51,8 +52,13 @@ public class UCrop {
     public static final String EXTRA_MAX_SIZE_X = EXTRA_PREFIX + ".MaxSizeX";
     public static final String EXTRA_MAX_SIZE_Y = EXTRA_PREFIX + ".MaxSizeY";
 
+
+    public static final String OSS_INFO = "OSS_INgit
+
     private Intent mCropIntent;
     private Bundle mCropOptionsBundle;
+
+
 
     /**
      * This method creates new Intent builder and sets both source and destination image URIs.
@@ -63,6 +69,7 @@ public class UCrop {
     public static UCrop of(@NonNull Uri source, @NonNull Uri destination) {
         return new UCrop(source, destination);
     }
+
 
     private UCrop(@NonNull Uri source, @NonNull Uri destination) {
         mCropIntent = new Intent();
@@ -116,6 +123,11 @@ public class UCrop {
 
     public UCrop withOptions(@NonNull Options options) {
         mCropOptionsBundle.putAll(options.getOptionBundle());
+        return this;
+    }
+
+    public UCrop withOSSOption(@NonNull OSSBean ossBean){
+        mCropOptionsBundle.putSerializable(OSS_INFO,ossBean);
         return this;
     }
 
