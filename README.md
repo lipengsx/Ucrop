@@ -2,21 +2,21 @@
 
 ```java
 OSSBean ossBean = new OSSBean();
-                OssService ossService = new OssService(this,ossBean);
-                ossService.uploadUri(this,cropuri);
-                ossService.setLoadDataComplete(
-                        new OssService.OssUploadDataListerner() {
-                            @Override
-                            public void uploadComplete(OSSResultBean ossResultBean) {
-                                Log.e("success",ossResultBean.getErrorMsg());
-                            }
+OssService ossService = new OssService(this,ossBean);
+ossService.uploadUri(this,cropuri);
+ossService.setLoadDataComplete(
+	new OssService.OssUploadDataListerner() {
+	    @Override
+	    public void uploadComplete(OSSResultBean ossResultBean) {
+		Log.e("success",ossResultBean.getErrorMsg());
+	    }
 
-                            @Override
-                            public void uploadFailed(OSSResultBean ossResultBean) {
-                                Log.e("error",ossResultBean.getErrorMsg());
-                            }
-                        }
-                );
+	    @Override
+	    public void uploadFailed(OSSResultBean ossResultBean) {
+		Log.e("error",ossResultBean.getErrorMsg());
+	    }
+	}
+);
 ```		
 
 # uCrop - Image Cropping Library for Android
