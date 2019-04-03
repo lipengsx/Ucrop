@@ -112,18 +112,15 @@ public class OssService {
         //下面3个参数依次为bucket名，Object名，上传文件路径
         PutObjectRequest put = new PutObjectRequest(ossBean.getBucket(), objectname, path);
         if (path == null || path.equals("")) {
-//            LogUtil.d("请选择图片....");
-            Log.e("upload pic Progress","请选择图片....");
-            //ToastUtils.showShort("请选择图片....");
+//            Log.e("upload pic Progress","请选择图片....");
+//            //ToastUtils.showShort("请选择图片....");
             return;
         }
-//        LogUtil.d("正在上传中....");
-        //ToastUtils.showShort("正在上传中....");
         // 异步上传，可以设置进度回调
         put.setProgressCallback(new OSSProgressCallback<PutObjectRequest>() {
             @Override
             public void onProgress(PutObjectRequest request, long currentSize, long totalSize) {
-                Log.e("upload pic Progress","currentSize: " + currentSize + " totalSize: " + totalSize);
+//                Log.e("upload pic Progress","currentSize: " + currentSize + " totalSize: " + totalSize);
                 double progress = currentSize * 1.0 / totalSize * 100.f;
 
                 if (progressCallback != null) {
@@ -135,33 +132,37 @@ public class OssService {
         OSSAsyncTask task = oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
             @Override
             public void onSuccess(PutObjectRequest request, PutObjectResult result) {
-                Log.e("upload pic Progress","upload Success ");
+//                Log.e("upload pic Progress","upload Success ");
                 ossResultBean.setSuccess(1);
                 loadLisneter.uploadComplete(ossResultBean);
-                //ToastUtils.showShort("上传成功");
             }
 
             @Override
             public void onFailure(PutObjectRequest request, ClientException clientExcepion, ServiceException serviceException) {
                 // 请求异常
-                ossResultBean.setSuccess(-1);
-                ossResultBean.setErrorMsg("表示向OSS发送请求或解析来自OSS的响应时发生错误");
-                loadLisneter.uploadFailed(ossResultBean);
-                Log.e("UploadFailure","UploadFailure");
+
+//                Log.e("UploadFailure","UploadFailure");
+                String msg = "Failure info:";
                 if (clientExcepion != null) {
-                    // 本地异常如网络异常等
-                    Log.e("UploadFailure","UploadFailure：表示向OSS发送请求或解析来自OSS的响应时发生错误。\n" +
-                            "  *例如，当网络不可用时，这个异常将被抛出");
+//                    // 本地异常如网络异常等
+//                    Log.e("UploadFailure","UploadFailure：表示向OSS发送请求或解析来自OSS的响应时发生错误。\n" +
+//                            "  *例如，当网络不可用时，这个异常将被抛出");
                     clientExcepion.printStackTrace();
                 }
                 if (serviceException != null) {
                     // 服务异常
-                    Log.e("UploadFailure","UploadFailure：表示在OSS服务端发生错误");
-                    Log.e("ErrorCode", serviceException.getErrorCode());
-                    Log.e("RequestId", serviceException.getRequestId());
-                    Log.e("HostId", serviceException.getHostId());
-                    Log.e("RawMessage", serviceException.getRawMessage());
+//                    Log.e("UploadFailure","UploadFailure：表示在OSS服务端发生错误");
+//                    Log.e("ErrorCode", serviceException.getErrorCode());
+//                    Log.e("RequestId", serviceException.getRequestId());
+//                    Log.e("HostId", serviceException.getHostId());
+//                    Log.e("RawMessage", serviceException.getRawMessage());
+                    msg += "\"ErrorCode:\"+serviceException.getErrorCode()+\"   RequestId:\"+serviceException.getRequestId()+\"    HostId:\"+serviceException.getHostId()+\"    RawMessage:\"+serviceException.getRawMessage()";
+                    Log.e("uploadFailure",msg);
                 }
+
+                ossResultBean.setSuccess(-1);
+                ossResultBean.setErrorMsg(msg);
+                loadLisneter.uploadFailed(ossResultBean);
             }
         });
         //task.cancel(); // 可以取消任务
