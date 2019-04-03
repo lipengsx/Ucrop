@@ -41,29 +41,35 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
             if (data != null) {
                 Uri cropuri = UCrop.getOutput(data);
-                OSSBean ossBean = new OSSBean();
-                OssService ossService = new OssService(this,ossBean);
-                ossService.uploadUri(this,cropuri);
-//                OssUploadTask ossUploadTask = new OssUploadTask(ossBean,this);
-                ossService.setLoadDataComplete(
-                        new OssService.OssUploadDataListerner() {
-                            @Override
-                            public void uploadComplete(OSSResultBean ossResultBean) {
-                                Log.e("success",ossResultBean.getErrorMsg());
-                            }
+                try {
+                    OSSBean ossBean = new OSSBean();
 
-                            @Override
-                            public void uploadFailed(OSSResultBean ossResultBean) {
-                                Log.e("error",ossResultBean.getErrorMsg());
+
+                    OssService ossService = new OssService(this, ossBean);
+                    ossService.uploadUri(this, cropuri);
+//                OssUploadTask ossUploadTask = new OssUploadTask(ossBean,this);
+                    ossService.setLoadDataComplete(
+                            new OssService.OssUploadDataListerner() {
+                                @Override
+                                public void uploadComplete(OSSResultBean ossResultBean) {
+                                    Log.e("success", ossResultBean.toString());
+                                }
+
+                                @Override
+                                public void uploadFailed(OSSResultBean ossResultBean) {
+                                    Log.e("error", ossResultBean.toString()]);
+                                }
                             }
-                        }
-                );
+                    );
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }
         switch (requestCode) {
